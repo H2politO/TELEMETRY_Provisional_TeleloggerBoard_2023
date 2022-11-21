@@ -55,6 +55,7 @@ static volatile uint32_t sys_tick_count = 0;
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 extern CAN_HandleTypeDef hcan2;
 /* USER CODE BEGIN EV */
 
@@ -216,9 +217,23 @@ void CAN2_RX0_IRQHandler(void)
 
   while(HAL_CAN_GetRxFifoFillLevel(&hcan2, CAN_RX_FIFO0) != 0){
 
-	  HAL_CAN_GetRxMessage(&hcan2, CAN_RX_FIFO0, &RxMessage_header, RxData);
-
+	  HAL_CAN_GetRxMessage(&hcan2, CAN_RX_FIFO0, &RxMessage_header, Rx_Data);
+  }
   /* USER CODE END CAN2_RX0_IRQn 1 */
+}
+
+/**
+  * @brief This function handles USB On The Go FS global interrupt.
+  */
+void OTG_FS_IRQHandler(void)
+{
+  /* USER CODE BEGIN OTG_FS_IRQn 0 */
+
+  /* USER CODE END OTG_FS_IRQn 0 */
+  HAL_PCD_IRQHandler(&hpcd_USB_OTG_FS);
+  /* USER CODE BEGIN OTG_FS_IRQn 1 */
+
+  /* USER CODE END OTG_FS_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

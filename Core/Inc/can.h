@@ -41,7 +41,8 @@ extern CAN_HandleTypeDef hcan2;
 void MX_CAN2_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+void SetCAN_Flag_HeartBeat(uint8_t value);
+void sendCAN(void);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

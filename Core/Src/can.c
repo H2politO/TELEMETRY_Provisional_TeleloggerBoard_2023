@@ -42,11 +42,11 @@ void MX_CAN2_Init(void)
 
   /* USER CODE END CAN2_Init 1 */
   hcan2.Instance = CAN2;
-  hcan2.Init.Prescaler = 16;
+  hcan2.Init.Prescaler = 10;
   hcan2.Init.Mode = CAN_MODE_NORMAL;
   hcan2.Init.SyncJumpWidth = CAN_SJW_1TQ;
-  hcan2.Init.TimeSeg1 = CAN_BS1_1TQ;
-  hcan2.Init.TimeSeg2 = CAN_BS2_1TQ;
+  hcan2.Init.TimeSeg1 = CAN_BS1_15TQ;
+  hcan2.Init.TimeSeg2 = CAN_BS2_2TQ;
   hcan2.Init.TimeTriggeredMode = DISABLE;
   hcan2.Init.AutoBusOff = DISABLE;
   hcan2.Init.AutoWakeUp = DISABLE;
@@ -78,8 +78,8 @@ void HAL_CAN_MspInit(CAN_HandleTypeDef* canHandle)
 
     __HAL_RCC_GPIOB_CLK_ENABLE();
     /**CAN2 GPIO Configuration
-    PB12     ------> CAN2_RX
-    PB13     ------> CAN2_TX
+    PB5     ------> CAN2_RX
+    PB6     ------> CAN2_TX
     */
     GPIO_InitStruct.Pin = CAN_RX_Pin|CAN_TX_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
@@ -110,8 +110,8 @@ void HAL_CAN_MspDeInit(CAN_HandleTypeDef* canHandle)
     __HAL_RCC_CAN1_CLK_DISABLE();
 
     /**CAN2 GPIO Configuration
-    PB12     ------> CAN2_RX
-    PB13     ------> CAN2_TX
+    PB5     ------> CAN2_RX
+    PB6     ------> CAN2_TX
     */
     HAL_GPIO_DeInit(GPIOB, CAN_RX_Pin|CAN_TX_Pin);
 
@@ -134,13 +134,15 @@ void sendCAN(void){
 	if (CAN_Flag_Status.CAN_Flag_HeartBeat == ENABLE) {
 	    CAN_Flag_Status.CAN_Flag_HeartBeat = DISABLE;
 
+	    Can_Tx_Header.IDE = CAN_ID_STD;
 	    Can_Tx_Header.StdId = ID_TELEMETRY_HEARTBEAT;
+	    Can_Tx_Header.RTR = CAN_RTR_DATA;
 	    Can_Tx_Header.DLC = 0;
 	    uint8_t empty_mex[0];
-	    uint32_t null_point = 0x0;
+	    uint32_t null_point;
 
 	    /* Transmit the message if there is an available mailbox -----------------*/
-	    while (HAL_CAN_AddTxMessage(&hcan2, &Can_Tx_Header, empty_mex, &null_point) == HAL_OK);
+	    while(HAL_CAN_AddTxMessage(&hcan2, &Can_Tx_Header, empty_mex, &null_point)!=HAL_OK){};
 	  }
 }
 /* USER CODE END 1 */
