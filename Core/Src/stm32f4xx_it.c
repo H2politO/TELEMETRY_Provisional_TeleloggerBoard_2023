@@ -20,8 +20,13 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f4xx_it.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "can.h"
+#include "string.h"
+#include "usbd_cdc_if.h"
+#include "usb_device.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -218,6 +223,17 @@ void CAN2_RX0_IRQHandler(void)
   while(HAL_CAN_GetRxFifoFillLevel(&hcan2, CAN_RX_FIFO0) != 0){
 
 	  HAL_CAN_GetRxMessage(&hcan2, CAN_RX_FIFO0, &RxMessage_header, Rx_Data);
+
+	  uint8_t header_ID[4];
+	  header_ID[0]=(RxMessage_header.StdId >> 24) & 0xFF;
+	  header_ID[1]=(RxMessage_header.StdId >> 16) & 0xFF;
+	  header_ID[2]=(RxMessage_header.StdId >> 8) & 0xFF;
+	  header_ID[3]=(RxMessage_header.StdId) & 0xFF;
+
+	  char *msg = strcat(strcat((char *)header_ID, (char *)Rx_Data), "\n\r");
+
+	  while(CDC_Transmit_FS((uint8_t *)msg, strlen(msg)) != HAL_OK);
+
   }
   /* USER CODE END CAN2_RX0_IRQn 1 */
 }

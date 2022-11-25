@@ -57,8 +57,10 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-char *data= "Hello from Telemetry";
+char *data= "Hello from Telemetry\n\r";
+char *data2= "Ste e Jano sono belli\n\r";
 uint8_t returnal = 5;
+uint8_t returnal2 = 6;
 /* USER CODE END 0 */
 
 /**
@@ -68,7 +70,7 @@ uint8_t returnal = 5;
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	//PA12 DATA+, PA11 DATA-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -103,8 +105,12 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	sendCAN();
-	returnal = CDC_Transmit_FS((uint8_t *)data, strlen(data));
-	// HAL_Delay(1000);
+	//CDC_Transmit_FS((uint8_t *)data, strlen(data));
+	//HAL_Delay(1000);
+
+	//while(CDC_Transmit_FS((uint8_t *)data2, strlen(data2))!=USBD_OK);
+	//HAL_Delay(1000);
+
 
   }
   /* USER CODE END 3 */
