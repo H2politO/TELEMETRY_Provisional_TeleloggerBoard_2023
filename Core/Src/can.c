@@ -21,6 +21,8 @@
 #include "can.h"
 
 /* USER CODE BEGIN 0 */
+#include "usbd_cdc_if.h"
+#include "string.h"
 
 volatile struct {
 	//uint8_t CAN_Flag_Data;      		// Data messages need to be sent
@@ -58,6 +60,9 @@ void MX_CAN2_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN CAN2_Init 2 */
+  if(HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_MSG_PENDING)!= HAL_OK){
+	  while(CDC_Transmit_FS((uint8_t *)"PROVA\n\r", strlen("PROVA\n\r")) != USBD_OK);
+  }
 
   /* USER CODE END CAN2_Init 2 */
 
@@ -128,6 +133,23 @@ void SetCAN_Flag_HeartBeat(uint8_t value) {
   CAN_Flag_Status.CAN_Flag_HeartBeat = value;
 }
 
+void CAN_setFilter(){
+
+	CAN_FilterTypeDef canFil; //CAN Bus Filter
+
+    canFil.FilterBank = 10;
+    canFil.FilterMode = CAN_FILTERMODE_IDMASK;
+    canFil.FilterFIFOAssignment = CAN_RX_FIFO0;
+    canFil.FilterIdHigh = 0;
+    canFil.FilterIdLow = 0;
+    canFil.FilterMaskIdHigh = 0;
+    canFil.FilterMaskIdLow = 0;
+    canFil.FilterScale = CAN_FILTERSCALE_32BIT;
+    canFil.FilterActivation = ENABLE;
+    canFil.SlaveStartFilterBank = 0;
+
+    HAL_CAN_ConfigFilter(&hcan2, &canFil);
+}
 void sendCAN(void){
 
 	CAN_TxHeaderTypeDef Can_Tx_Header;

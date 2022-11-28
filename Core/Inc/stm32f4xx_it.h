@@ -58,6 +58,7 @@ void SysTick_Handler(void);
 void CAN2_RX0_IRQHandler(void);
 void OTG_FS_IRQHandler(void);
 /* USER CODE BEGIN EFP */
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan);
 
 /* USER CODE END EFP */
 

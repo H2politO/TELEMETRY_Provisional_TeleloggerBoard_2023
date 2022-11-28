@@ -20,7 +20,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f4xx_it.h"
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "can.h"
@@ -217,24 +216,6 @@ void CAN2_RX0_IRQHandler(void)
   /* USER CODE END CAN2_RX0_IRQn 0 */
   HAL_CAN_IRQHandler(&hcan2);
   /* USER CODE BEGIN CAN2_RX0_IRQn 1 */
-  CAN_RxHeaderTypeDef RxMessage_header;
-  uint8_t Rx_Data[8]={0};
-
-  while(HAL_CAN_GetRxFifoFillLevel(&hcan2, CAN_RX_FIFO0) != 0){
-
-	  HAL_CAN_GetRxMessage(&hcan2, CAN_RX_FIFO0, &RxMessage_header, Rx_Data);
-
-	  uint8_t header_ID[4];
-	  header_ID[0]=(RxMessage_header.StdId >> 24) & 0xFF;
-	  header_ID[1]=(RxMessage_header.StdId >> 16) & 0xFF;
-	  header_ID[2]=(RxMessage_header.StdId >> 8) & 0xFF;
-	  header_ID[3]=(RxMessage_header.StdId) & 0xFF;
-
-	  char *msg = strcat(strcat((char *)header_ID, (char *)Rx_Data), "\n\r");
-
-	  while(CDC_Transmit_FS((uint8_t *)msg, strlen(msg)) != HAL_OK);
-
-  }
   /* USER CODE END CAN2_RX0_IRQn 1 */
 }
 
@@ -253,5 +234,20 @@ void OTG_FS_IRQHandler(void)
 }
 
 /* USER CODE BEGIN 1 */
+void  HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan){
+
+	  char *usb_callback_str = "SOno in callback\n\r";
+	  while(CDC_Transmit_FS((uint8_t *)usb_callback_str, strlen(usb_callback_str))!=USBD_OK);
+
+	  CAN_RxHeaderTypeDef RxMessage_header;
+	  uint8_t Rx_Data[8]={0};
+
+	  HAL_CAN_GetRxMessage(&hcan2, CAN_RX_FIFO0, &RxMessage_header, Rx_Data);
+
+	  char msg[50];
+	  sprintf(msg, "Data:%s-ID:%ld\n\r", (char*)Rx_Data, (uint32_t)RxMessage_header.StdId);
+
+	  while(CDC_Transmit_FS((uint8_t *)msg, strlen(msg)) != USBD_OK);
+}
 
 /* USER CODE END 1 */

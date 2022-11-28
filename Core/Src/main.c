@@ -91,9 +91,10 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_CAN2_Init();
   MX_USB_DEVICE_Init();
+  MX_CAN2_Init();
   /* USER CODE BEGIN 2 */
+
   HAL_CAN_Start(&hcan2);
   /* USER CODE END 2 */
 
@@ -108,10 +109,32 @@ int main(void)
 	//CDC_Transmit_FS((uint8_t *)data, strlen(data));
 	//HAL_Delay(1000);
 
-	//while(CDC_Transmit_FS((uint8_t *)data2, strlen(data2))!=USBD_OK);
-	//HAL_Delay(1000);
+	//while(CDC_Transmit_FS((uint8_t *)data, strlen(data))!=USBD_OK);
+	//HAL_Delay(50);
+/*
+	if(HAL_CAN_GetRxFifoFillLevel(&hcan2, CAN_RX_FIFO0) != 0){
+		  CAN_RxHeaderTypeDef RxMessage_header;
+		  uint8_t Rx_Data[8];
+
+		  HAL_CAN_GetRxMessage(&hcan2, CAN_RX_FIFO0, &RxMessage_header, Rx_Data);
+
+		  //uint8_t header_ID[4];
+		  //header_ID[0]=(RxMessage_header.StdId >> 24) & 0xFF;
+		  //header_ID[1]=(RxMessage_header.StdId >> 16) & 0xFF;
+		  //header_ID[2]=(RxMessage_header.StdId >> 8) & 0xFF;
+		  //header_ID[3]=(RxMessage_header.StdId) & 0xFF;
+
+		  char msg[50];
+		 // strcat((char*)msg,);
+
+		  sprintf(msg, "Data:%s-ID:%ld\n\r", (char*)Rx_Data, (uint32_t)RxMessage_header.StdId);
 
 
+		  //strcat(strcat((char *)header_ID, (char *)Rx_Data), "\n\r");
+
+		  while(CDC_Transmit_FS((uint8_t *)msg, strlen(msg)) != USBD_OK);
+
+	  } */
   }
   /* USER CODE END 3 */
 }
