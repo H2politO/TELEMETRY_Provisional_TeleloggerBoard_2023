@@ -60,9 +60,10 @@ void MX_CAN2_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN CAN2_Init 2 */
-  if(HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_MSG_PENDING)!= HAL_OK){
-	  while(CDC_Transmit_FS((uint8_t *)"PROVA\n\r", strlen("PROVA\n\r")) != USBD_OK);
-  }
+  //if(HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_MSG_PENDING)!= HAL_OK){
+//	  while(CDC_Transmit_FS((uint8_t *)"PROVA\n\r", strlen("PROVA\n\r")) != USBD_OK);
+
+//}
 
   /* USER CODE END CAN2_Init 2 */
 

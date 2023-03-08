@@ -1,2 +1,2 @@
-# Telemetry_2023git
- Telemetry
+# Telemetry_Minimal
+ Minimal telemetry firmware (no GPS)

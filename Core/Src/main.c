@@ -57,10 +57,6 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-char *data= "Hello from Telemetry\n\r";
-char *data2= "Ste e Jano sono belli\n\r";
-uint8_t returnal = 5;
-uint8_t returnal2 = 6;
 /* USER CODE END 0 */
 
 /**
@@ -94,7 +90,7 @@ int main(void)
   MX_USB_DEVICE_Init();
   MX_CAN2_Init();
   /* USER CODE BEGIN 2 */
-
+  CAN_setFilter();
   HAL_CAN_Start(&hcan2);
   /* USER CODE END 2 */
 
@@ -111,30 +107,20 @@ int main(void)
 
 	//while(CDC_Transmit_FS((uint8_t *)data, strlen(data))!=USBD_OK);
 	//HAL_Delay(50);
-/*
+
 	if(HAL_CAN_GetRxFifoFillLevel(&hcan2, CAN_RX_FIFO0) != 0){
 		  CAN_RxHeaderTypeDef RxMessage_header;
-		  uint8_t Rx_Data[8];
+		  uint8_t Rx_Data[8] = {0,0,0,0,0,0,0,0};
 
 		  HAL_CAN_GetRxMessage(&hcan2, CAN_RX_FIFO0, &RxMessage_header, Rx_Data);
 
-		  //uint8_t header_ID[4];
-		  //header_ID[0]=(RxMessage_header.StdId >> 24) & 0xFF;
-		  //header_ID[1]=(RxMessage_header.StdId >> 16) & 0xFF;
-		  //header_ID[2]=(RxMessage_header.StdId >> 8) & 0xFF;
-		  //header_ID[3]=(RxMessage_header.StdId) & 0xFF;
-
 		  char msg[50];
-		 // strcat((char*)msg,);
 
-		  sprintf(msg, "Data:%s-ID:%ld\n\r", (char*)Rx_Data, (uint32_t)RxMessage_header.StdId);
-
-
-		  //strcat(strcat((char *)header_ID, (char *)Rx_Data), "\n\r");
+		  sprintf(msg, "@:%ld:%d:%d:%d:%d:%d:%d:%d:%d:%d:|", RxMessage_header.StdId, (uint8_t)RxMessage_header.DLC, Rx_Data[0], Rx_Data[1], Rx_Data[2], Rx_Data[3], Rx_Data[4], Rx_Data[5], Rx_Data[6], Rx_Data[7]);
 
 		  while(CDC_Transmit_FS((uint8_t *)msg, strlen(msg)) != USBD_OK);
 
-	  } */
+	  }
   }
   /* USER CODE END 3 */
 }

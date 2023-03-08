@@ -64,8 +64,8 @@ all: main-build
 main-build: Telemetry_2023.elf secondary-outputs
 
 # Tool invocations
-Telemetry_2023.elf Telemetry_2023.map: $(OBJS) $(USER_OBJS) C:\Users\Pape\STM32CubeIDE\Projects\Telemetry_2023\STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Telemetry_2023.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Pape\STM32CubeIDE\Projects\Telemetry_2023\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Telemetry_2023.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Telemetry_2023.elf Telemetry_2023.map: $(OBJS) $(USER_OBJS) C:\Users\lrada\Downloads\TELEMETRY_TeleloggerBoard_2023-main\STM32F446RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Telemetry_2023.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\lrada\Downloads\TELEMETRY_TeleloggerBoard_2023-main\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Telemetry_2023.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
